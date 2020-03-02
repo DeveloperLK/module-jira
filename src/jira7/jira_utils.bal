@@ -19,6 +19,8 @@
 import ballerina/http;
 import ballerina/io;
 
+import ballerina/lang.'int as intlib;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                  Functions                                                         //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,4 +58,11 @@ function getValidatedResponse(http:Response|error httpConnectorResponse) returns
 function hasValidStatusCode(http:Response response) returns boolean {
     int statusCode = response.statusCode;
     return statusCode == STATUS_CODE_OK || statusCode == STATUS_CODE_CREATED || statusCode == STATUS_CODE_NO_CONTENT;
+}
+
+function hasPaginatedResponse(json response, int startAt) returns boolean|error {
+    int totalResults = response.total != null?  ( <int> check intlib:fromString(response.total.toString())) : 0;
+    int maxResults = response.total != null?  (<int> check intlib:fromString(response.maxResults.toString())) : 0;
+    io:println("JQL response -> Retrieved: " + startAt.toString() + "\t totalResults: " + totalResults.toString());
+    return totalResults > startAt;
 }

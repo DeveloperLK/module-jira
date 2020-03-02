@@ -66,6 +66,8 @@ function jsonToProjectCategory(json request) returns ProjectCategory {
     return target;
 }
 
+
+
 function jsonToProjectComponent(json request) returns ProjectComponent {
 
     ProjectComponent target = {};
@@ -158,6 +160,10 @@ function jsonToIssue(json request) returns Issue|error {
     request.fields.project != null ?
     jsonToProjectSummary(check request.fields.project) : {}: {};
 
+    target.parent = request.fields != null ?
+    request.fields.parent != null ?
+    jsonToIssueSummary(check request.fields.parent) : {}: {};
+
     target.issueType= request.fields != null ?
     request.fields.issuetype != null ?
     jsonToIssueType(check request.fields.issuetype) : {}: {};
@@ -230,6 +236,7 @@ function jsonToIssueType(json request) returns IssueType {
 function issueRequestToJson(IssueRequest request) returns json {
 
     map<json> target = {fields:{}};
+    target["key"] = request.key != EMPTY_STRING ? request.key : null;
     map<json> fieldJson = <map<json>>target["fields"];
     fieldJson["summary"] = request.summary != EMPTY_STRING ? request.summary : null;
     fieldJson["issuetype"] = request.issueTypeId != EMPTY_STRING ? {id:request.issueTypeId} : null;
@@ -423,4 +430,9 @@ function convertToActor(json actor) returns Actor {
     value.displayName = actor.displayName != null ? actor.displayName.toString() : "";
     value.'type = actor.'type != null ? actor.'type.toString() : "";
     return value;
+}
+
+function errorToJiraConnectorError(error request) returns JiraConnectorError {
+    JiraConnectorError target = request.detail()["message"] != EMPTY_STRING ? {message:request.detail()["message"].toString(), cause: request.detail()["cause"]} : {};
+    return target;
 }

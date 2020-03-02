@@ -23,6 +23,7 @@
 const string JIRA_REST_API_RESOURCE = "/rest/api/";
 const string JIRA_AUTH_RESOURCE = "/rest/auth/1/session/";
 const string JIRA_REST_API_VERSION = "2";
+const string URL_ENCODING_CHARSET = "utf-8";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          HTTP Status Codes                                                         //

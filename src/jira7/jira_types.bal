@@ -287,7 +287,8 @@ public type AvatarUrls record {
 # + reporterName - Jira username of the issue reporter
 # + createdDate - Created date of the issue
 # + dueDate - Due date of the issue
-# + timespent - Assigned time spent for the issue
+# + timespent - Assigned time spent for the 
+# + parent - parent issue of the issueissue
 # + issueType - Type of the jira issue
 # + project - Represent summarized details of the project which the issue is related to
 # + comments - Issue comments
@@ -311,21 +312,28 @@ public type Issue record {
     string resolutionDate = "";
     string aggregatetimespent = "";
     IssueType issueType = {};
+    IssueSummary parent = {};	
     ProjectSummary project = {};
     IssueComment[] comments = [];
     json[] customFields = [];
 };
 
 # Represents record of Jira issue creation template.
+# + key - Issue key
 # + summary - Summary of the issue
 # + issueTypeId - Id of the issue type for the new issue
 # + projectId - Id of the project related to the new issue
+# + parentIssueKey - issue key of parent of the new issue
 # + assigneeName - Jira username of the issue assignee
+# + dueDate - Due date of the issue
 public type IssueRequest record {
+    string key = "";	
     string summary = "";
     string issueTypeId = "";
     string projectId = "";
+    string parentIssueKey = "";
     string assigneeName = "";
+    string dueDate;
 };
 
 # Represents a jira issue.
@@ -357,3 +365,24 @@ public type IssueComment record {
     string body = "";
     string updatedDate = "";
 };
+
+//TODO Add annotations
+public type JqlRequest record {
+    string jql="";
+    int startAt;
+    int maxResults;
+    string[] fields;
+};
+
+# Represent Jira Connector based errors.
+# + 'type - type of the error (HTTP error,server error etc.)
+# + message - error message
+# + jiraServerErrorLog - error log returned by the jira server, for "server error" type
+# + cause - cause for the error
+public type JiraConnectorError record {
+    string 'type = "";
+    string message = "";
+    error cause;
+    json jiraServerErrorLog;
+};
+

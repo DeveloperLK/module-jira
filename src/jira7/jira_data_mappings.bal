@@ -162,7 +162,7 @@ function jsonToIssue(json request) returns Issue|error {
 
     target.parent = request.fields != null ?
     request.fields.parent != null ?
-    jsonToIssueSummary(check request.fields.parent) : {}: {};
+    check jsonToIssueSummary(check request.fields.parent) : {}: {};
 
     target.issueType= request.fields != null ?
     request.fields.issuetype != null ?
@@ -216,7 +216,7 @@ function jsonToIssueSummary(json request) returns IssueSummary|error {
     request.fields.issuetype != null ?
     jsonToIssueType(check request.fields.issuetype) : {} : {};
 
-return target;
+    return target;
 }
 
 function jsonToIssueType(json request) returns IssueType {
@@ -430,9 +430,4 @@ function convertToActor(json actor) returns Actor {
     value.displayName = actor.displayName != null ? actor.displayName.toString() : "";
     value.'type = actor.'type != null ? actor.'type.toString() : "";
     return value;
-}
-
-function errorToJiraConnectorError(error request) returns JiraConnectorError {
-    JiraConnectorError target = request.detail()["message"] != EMPTY_STRING ? {message:request.detail()["message"].toString(), cause: request.detail()["cause"]} : {};
-    return target;
 }
